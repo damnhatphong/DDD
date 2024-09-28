@@ -1,0 +1,1 @@
+https://www.milanjovanovic.tech/blog/enforcing-software-architecture-with-architecture-tests

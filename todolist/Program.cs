@@ -1,18 +1,26 @@
+using TodoList.Application.Middlewares;
+using TodoList.Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddPersistence();
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+//builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    //app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();
+
+// Custom Middlewares
+app.UseMiddleware<ValidationExceptionHandlingMiddleware>();
+
 
 var summaries = new[]
 {
@@ -21,7 +29,7 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", () =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
+    var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
         (
             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
@@ -32,6 +40,14 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast");
+
+app.MapGet("/tasks", () =>
+{
+});
+app.MapPut("/tasks", () => { });
+app.MapPost("/tasks", () => { });
+app.MapPatch("/tasks", () => { });
+app.MapDelete("/tasks", () => { });
 
 app.Run();
 
